@@ -9,54 +9,53 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 let allHearts = document.querySelectorAll('span.like-glyph');
-let errorModal = document.querySelector('div#modal')
+// let errorModal = document.querySelector('div#modal')
+let modal = document.querySelector('.hidden')
 
 function likeHeart(e) {
   let targetHeart = e.target
-  console.log(targetHeart)
+  console.log(targetHeart.textContent)
   mimicServerCall()
   .then(function () {
-    // targetHeart.textContent = '♡'
-    targetHeart.classList.add('activated-heart')
-    targetHeart.textContent = FULL_HEART;
+    if (targetHeart.textContent === EMPTY_HEART) {
+      targetHeart.classList.add('activated-heart')
+      targetHeart.textContent = FULL_HEART;
+    } else {
+      targetHeart.classList.remove('activated-heart')
+      targetHeart.textContent = EMPTY_HEART;
+    }
   })
   .catch(function () {
-    errorModal.removeAttribute('hidden');
-    // errorModal.innerHTML = `
-    // id="modal">
-    //   <h2>Error!</h2>
-    //   <p id="modal-message"></p>
-    // `
+    modal.classList.remove('hidden')
+    setTimeout(() => {modal.classList.add('hidden')}, 3000)
   })
 };
 
-function unlikeHeart(e) {
-  let targetHeart = e.target
-  console.log(targetHeart)
-  mimicServerCall()
-  .then(function () {
-    // targetHeart.textContent = '♡'
-    targetHeart.classList.remove('activated-heart')
-    targetHeart.textContent = EMPTY_HEART;
-  })
-  .catch(function () {
-    errorModal.removeAttribute('hidden');
-    // errorModal.innerHTML = `
-    // id="modal">
-    //   <h2>Error!</h2>
-    //   <p id="modal-message"></p>
-    // `
-  })
-};
+// function unlikeHeart(e) {
+//   let targetHeart = e.target
+//   console.log(targetHeart)
+//   mimicServerCall()
+//   .then(function () {
+//     // targetHeart.textContent = '♡'
+//     targetHeart.classList.remove('activated-heart')
+//     targetHeart.textContent = EMPTY_HEART;
+//   })
+//   .catch(function () {;
+//     // Display the error modal by removing the .hidden class
+//     // Display the server error message in the modal
+//     // Use setTimeout to hide the modal after 3 seconds (add the .hidden class)
+//     modal.removeAttribute('hidden');
+//     modal.innerHTML = `
+//     id="modal">
+//       <h2>Error!</h2>
+//       <p id="modal-message"></p>
+//     `
+//     setTimeout(() => {modal.setAttribute('hidden')}, 3000)
+//   })
+// };
 
 for (let heart of allHearts) {
-  if (heart.textContent === EMPTY_HEART) {
-    console.log("unlike heart");
     heart.addEventListener('click', likeHeart);
-  } else {
-    console.log('like Heart');
-    heart.addEventListener('click', unlikeHeart);
-  }
 }
 
 
@@ -77,5 +76,5 @@ function mimicServerCall(url="http://mimicServer.example.com", config={}) {
   });
 }
 
-mimicServerCall()
+// mimicServerCall()
 
