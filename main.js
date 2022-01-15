@@ -8,36 +8,56 @@ document.addEventListener('DOMContentLoaded', function() {
   console.log('DOM Content Loaded!')
 });
 
-let allHearts = document.querySelectorAll('like-glyph');
-// let errorModal = document.querySelector('div'[0])
+let allHearts = document.querySelectorAll('span.like-glyph');
+let errorModal = document.querySelector('div#modal')
 
 function likeHeart(e) {
   let targetHeart = e.target
   console.log(targetHeart)
   mimicServerCall()
   .then(function () {
-    targetHeart.textContent = '♡'
-    // targetHeart.classList.add('activated-heart')
-    // targetHeart.textContent = FULL_HEART;
+    // targetHeart.textContent = '♡'
+    targetHeart.classList.add('activated-heart')
+    targetHeart.textContent = FULL_HEART;
   })
-  .catch(function (error) {
-    errorModal.innerHTML = `
-    id="modal">
-      <h2>Error!</h2>
-      <p id="modal-message"></p>
-    `
+  .catch(function () {
+    errorModal.removeAttribute('hidden');
+    // errorModal.innerHTML = `
+    // id="modal">
+    //   <h2>Error!</h2>
+    //   <p id="modal-message"></p>
+    // `
+  })
+};
+
+function unlikeHeart(e) {
+  let targetHeart = e.target
+  console.log(targetHeart)
+  mimicServerCall()
+  .then(function () {
+    // targetHeart.textContent = '♡'
+    targetHeart.classList.remove('activated-heart')
+    targetHeart.textContent = EMPTY_HEART;
+  })
+  .catch(function () {
+    errorModal.removeAttribute('hidden');
+    // errorModal.innerHTML = `
+    // id="modal">
+    //   <h2>Error!</h2>
+    //   <p id="modal-message"></p>
+    // `
   })
 };
 
 for (let heart of allHearts) {
-  heart.addEventListener('click', likeHeart)
+  if (heart.textContent === EMPTY_HEART) {
+    console.log("unlike heart");
+    heart.addEventListener('click', likeHeart);
+  } else {
+    console.log('like Heart');
+    heart.addEventListener('click', unlikeHeart);
+  }
 }
-
-// if (heart.innerText === '♡') {
-//   heart.addEventListener('click', likeHeart);
-// } else if (heart[0].innerText === '♥') {
-//   heart.addEventListener('click', unlikeHeart);
-// }
 
 
 //------------------------------------------------------------------------------
